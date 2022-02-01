@@ -1,0 +1,144 @@
+﻿<Window x:Class="FractalDrawer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodel="clr-namespace:FractalDrawer.ViewModel"
+        xmlns:fractals="clr-namespace:FractalDrawer.Fractals"
+        mc:Ignorable="d"
+        Title="FractalDrawer" Height="600" Width="800" MinHeight="600" MinWidth="800">
+    <Window.DataContext>
+        <viewmodel:MainWindowViewModel />
+    </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="FractalOptionsHelper" TargetType="ContentControl">
+            <Style.Setters>
+                <Setter Property="ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate />
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedFractalInfo.Type}"
+                             Value="{x:Static fractals:FractalType.TreeFractal}">
+                    <Setter Property="Content" Value="{Binding Path=.}" />
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="Параметры фрактального дерева" TextWrapping="Wrap"
+                                               FontSize="20" Margin="0 10 0 5" />
+                                    <DockPanel Margin="0 10 0 5">
+                                        <TextBlock DockPanel.Dock="Top" Text="Отношение длин отрезков" />
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   Text="{Binding ScaleFactor, StringFormat={}{0:F2}}"
+                                                   FontSize="20" TextAlignment="Center" Margin="5 0 0 0" Width="50" />
+                                        <Slider Value="{Binding ScaleFactor}" Minimum="1.3" Maximum="3" />
+                                    </DockPanel>
+                                    <DockPanel Margin="0 10 0 5">
+                                        <TextBlock DockPanel.Dock="Top" Text="Угол наклона левого отрезка" />
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   Text="{Binding LeftAngle, StringFormat={}{0:F2}}"
+                                                   FontSize="20" TextAlignment="Center" Margin="5 0 0 0" Width="50" />
+                                        <Slider Value="{Binding LeftAngle}" Minimum="0" Maximum="2" />
+                                    </DockPanel>
+                                    <DockPanel Margin="0 10 0 5">
+                                        <TextBlock DockPanel.Dock="Top" Text="Угол наклона правого отрезка" />
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   Text="{Binding RightAngle, StringFormat={}{0:F2}}"
+                                                   FontSize="20" TextAlignment="Center" Margin="5 0 0 0" Width="50" />
+                                        <Slider Value="{Binding RightAngle}" Minimum="0" Maximum="2" />
+                                    </DockPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SelectedFractalInfo.Type}"
+                             Value="{x:Static fractals:FractalType.CantorFractal}">
+                    <Setter Property="Content" Value="{Binding Path=.}" />
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="Параметры фрактала Кантора" FontSize="20" Margin="0 10 0 5" />
+                                    <DockPanel Margin="0 10 0 5">
+                                        <TextBlock DockPanel.Dock="Top" Text="Расстояние между отрезками" />
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   Text="{Binding GapLength, StringFormat={}{0:F2}}"
+                                                   FontSize="20" TextAlignment="Center" Margin="5 0 0 0" Width="50" />
+                                        <Slider Value="{Binding GapLength}" Minimum="2" Maximum="10" />
+                                    </DockPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Left" Width="250" Margin="10">
+            <TextBlock Text="Общие параметры фрактала" TextWrapping="Wrap" FontSize="20" Margin="0 10 0 5" />
+            <ComboBox ItemsSource="{Binding FractalTypes}"
+                      SelectedItem="{Binding SelectedFractalInfo, Mode=TwoWay}" />
+            <DockPanel Margin="0 10 0 5">
+                <TextBlock DockPanel.Dock="Top" Text="Глубина фрактала" />
+                <TextBlock DockPanel.Dock="Right" Text="{Binding Depth}"
+                           FontSize="20" TextAlignment="Center" Margin="5 0 0 0" Width="50" />
+                <Slider Value="{Binding Depth}" Minimum="0"
+                        Maximum="{Binding SelectedFractalInfo.MaxDepth}"
+                        TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" />
+            </DockPanel>
+            <DockPanel Margin="0 10 0 5">
+                <TextBlock DockPanel.Dock="Top" Text="Увеличение" />
+                <TextBlock DockPanel.Dock="Right"
+                           Text="{Binding ZoomFactor, StringFormat={}{0:F2}}"
+                           FontSize="20" TextAlignment="Center" Margin="5 0 0 0" Width="50" />
+                <Slider Value="{Binding ZoomFactor}" Minimum="1" Maximum="5"
+                        Ticks="1,2,3,5" TickPlacement="BottomRight" />
+            </DockPanel>
+            <DockPanel Margin="0 10 0 5">
+                <TextBlock DockPanel.Dock="Top" Text="Цвета градиента" />
+                <UniformGrid Columns="2" Height="30">
+                    <Button Margin="0 0 5 0" Command="{Binding StartColorCommand}">
+                        <Button.Background>
+                            <SolidColorBrush Color="{Binding StartColor}" />
+                        </Button.Background>
+                    </Button>
+                    <Button Margin="5 0 0 0" Command="{Binding EndColorCommand}">
+                        <Button.Background>
+                            <SolidColorBrush Color="{Binding EndColor}" />
+                        </Button.Background>
+                    </Button>
+                </UniformGrid>
+            </DockPanel>
+            <Button Content="Сохранить изображение в файл..." Height="30" Margin="0 10 0 0"
+                    Command="{Binding SaveFileCommand}" />
+            <ContentControl Style="{StaticResource FractalOptionsHelper}"
+                            Content="{Binding Path=.}" />
+        </StackPanel>
+        <ScrollViewer Name="ScrollViewer" VerticalScrollBarVisibility="Visible"
+                      HorizontalScrollBarVisibility="Visible" ScrollChanged="ScrollViewer_OnScrollChanged">
+            <Thumb DragDelta="Thumb_OnDragDelta">
+                <Thumb.Template>
+                    <ControlTemplate>
+                        <Grid Width="{Binding ElementName=ScrollViewer, Path=ActualWidth}"
+                              Height="{Binding ElementName=ScrollViewer, Path=ActualHeight}">
+                            <Grid.LayoutTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="{Binding ZoomFactor}"
+                                                    ScaleY="{Binding ZoomFactor}" />
+                                </TransformGroup>
+                            </Grid.LayoutTransform>
+                            <Viewbox>
+                                <ContentPresenter Content="{Binding Canvas}" />
+                            </Viewbox>
+                        </Grid>
+                    </ControlTemplate>
+                </Thumb.Template>
+            </Thumb>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

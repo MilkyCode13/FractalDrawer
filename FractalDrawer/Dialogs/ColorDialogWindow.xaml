@@ -1,0 +1,44 @@
+﻿<Window x:Class="FractalDrawer.Dialogs.ColorDialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:FractalDrawer.Dialogs"
+        mc:Ignorable="d"
+        Title="Выбор цвета" Height="250" Width="400" ResizeMode="NoResize">
+    <Window.DataContext>
+        <local:ColorDialogWindowViewModel />
+    </Window.DataContext>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Command="{Binding OkCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Width="60" Margin="5" Content="OK" />
+            <Button Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Width="60" Margin="5" Content="Отмена" />
+        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Rectangle Width="200" Height="200">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="{Binding SelectedColor}" />
+                </Rectangle.Fill>
+            </Rectangle>
+            <StackPanel Grid.Column="1" Margin="10">
+                <TextBlock Text="Красный" />
+                <TextBlock Text="{Binding Red}" />
+                <Slider Minimum="0" Maximum="255" Value="{Binding Red}" />
+                <TextBlock Text="Зеленый" />
+                <TextBlock Text="{Binding Green}" />
+                <Slider Minimum="0" Maximum="255" Value="{Binding Green}" />
+                <TextBlock Text="Синий" />
+                <TextBlock Text="{Binding Blue}" />
+                <Slider Minimum="0" Maximum="255" Value="{Binding Blue}" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>
