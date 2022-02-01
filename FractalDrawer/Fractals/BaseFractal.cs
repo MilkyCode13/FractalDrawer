@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -27,11 +26,11 @@ namespace FractalDrawer.Fractals
         /// <param name="startColor">The start color.</param>
         /// <param name="endColor">The end color.</param>
         /// <exception cref="ArgumentException">The depth is below 0 or above maximum depth.</exception>
-        [SuppressMessage("ReSharper", "ParameterOnlyUsedForPreconditionCheck.Local")]
         protected BaseFractal(FractalInfo info, int depth, int canvasHeight, int canvasWidth, Color startColor,
             Color endColor)
         {
-            if (depth < 0 || depth > info.MaxDepth)
+            MaxDepth = info.MaxDepth;
+            if (depth < 0 || depth > MaxDepth)
             {
                 throw new ArgumentException("Depth cannot be below 0 or above maximum depth.");
             }
@@ -47,11 +46,13 @@ namespace FractalDrawer.Fractals
                 Canvas = new Canvas { Height = canvasHeight, Width = canvasWidth, Background = Brushes.White };
             });
         }
+        
+        public int MaxDepth { get; }
 
         /// <summary>
         /// Gets the fractal depth.
         /// </summary>
-        protected int Depth { get; }
+        public int Depth { get; }
 
         /// <summary>
         /// Gets the color gradient values. 
