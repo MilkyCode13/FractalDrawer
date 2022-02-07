@@ -62,7 +62,7 @@
                         <Setter.Value>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBlock Text="Параметры фрактала Кантора" FontSize="20" Margin="0 10 0 5" />
+                                    <TextBlock Text="Параметры фрактала Кантора" FontSize="20" Margin="0 10 0 5" TextWrapping="Wrap"/>
                                     <DockPanel Margin="0 10 0 5">
                                         <TextBlock DockPanel.Dock="Top" Text="Расстояние между отрезками" />
                                         <TextBlock DockPanel.Dock="Right"
